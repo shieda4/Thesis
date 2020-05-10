@@ -1,4 +1,4 @@
-from dama import Dama
+from game import Game
 from neural_network import Residual
 import numpy as np
 import time
