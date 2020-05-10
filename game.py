@@ -299,3 +299,75 @@ class Game(object):
 
         black = black * -1
         self.state = black
+
+    def remove_none_attacks(self, all_moves):
+        for move in all_moves:
+            # For Valid Moves
+            if move[4] == 1:
+                if True:
+                    # For Normal Pieces
+                    if self.state[move[0]][move[1]] == 1:
+                        if abs(move[0] - move[2]) == 2:
+                            move[4] = 0
+                    # For King Pieces
+                    else:
+                        if abs(move[0] - move[2]) > 1:
+                            # Up
+                            if move[0] - move[2] > 0:
+                                # Left
+                                if move[1] - move[3] > 0:
+                                    if self.state[move[2] + 1][move[3] + 1] in set([-1, -2]):
+                                        move[4] = 0
+                                # Right
+                                else:
+                                    if self.state[move[2] + 1][move[3] - 1] in set([-1, -2]):
+                                        move[4] = 0
+                            # Down
+                            else:
+                                # Left
+                                if move[1] - move[3] > 0:
+                                    if self.state[move[2] - 1][move[3] + 1] in set([-1, -2]):
+                                        move[4] = 0
+                                # Right
+                                else:
+                                    if self.state[move[2] - 1][move[3] - 1] in set([-1, -2]):
+                                        move[4] = 0
+
+    def attack_move_available(self, all_moves):
+        attack_move_available = False
+        for move in all_moves:
+            # For Valid Moves
+            if move[4] == 1:
+                if True:
+                    # For Normal Pieces
+                    if self.state[move[0]][move[1]] == 1:
+                        if abs(move[0] - move[2]) == 2:
+                            attack_move_available = True
+                            break
+                    # For King Pieces
+                    else:
+                        if abs(move[0] - move[2]) > 1:
+                            # Up
+                            if move[0] - move[2] > 0:
+                                # Left
+                                if move[1] - move[3] > 0:
+                                    if self.state[move[2] + 1][move[3] + 1] in set([-1, -2]):
+                                        attack_move_available = True
+                                        break
+                                # Right
+                                else:
+                                    if self.state[move[2] + 1][move[3] - 1] in set([-1, -2]):
+                                        attack_move_available = True
+                                        break
+                            # Down
+                            else:
+                                # Left
+                                if move[1] - move[3] > 0:
+                                    if self.state[move[2] - 1][move[3] + 1] in set([-1, -2]):
+                                        attack_move_available = True
+                                        break
+                                # Right
+                                else:
+                                    if self.state[move[2] - 1][move[3] - 1] in set([-1, -2]):
+                                        attack_move_available = True
+                                        break
