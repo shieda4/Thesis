@@ -27,7 +27,7 @@ class Game(object):
                                [-1, 0, -1, 0, -1, 0, -1, 0],
                                [0, -1, 0, -1, 0, -1, 0, -1],
                                [0, 0, 0, 0, 0, 0, 0, 0],
-                               [0, 0, 0, 0, 0, 0, 0, 0],
+                               [0, 0, 0, -1, 0, 0, 0, 0],
                                [1, 0, 1, 0, 1, 0, 1, 0],
                                [0, 1, 0, 1, 0, 1, 0, 1],
                                [1, 0, 1, 0, 1, 0, 1, 0]])
@@ -261,7 +261,8 @@ class Game(object):
             # Empty Square
             else:
                 pass
-
+        if self.attack_move_available(all_moves):
+            all_moves = self.remove_non_attacks(all_moves)
         return all_moves
 
     def check_game_over(self):
@@ -305,14 +306,14 @@ class Game(object):
         black = black * -1
         self.state = black
 
-    def remove_none_attacks(self, all_moves):
+    def remove_non_attacks(self, all_moves):
         for move in all_moves:
             # For Valid Moves
             if move[4] == 1:
                 if True:
                     # For Normal Pieces
                     if self.state[move[0]][move[1]] == 1:
-                        if abs(move[0] - move[2]) == 2:
+                        if abs(move[0] - move[2]) != 2:
                             move[4] = 0
                     # For King Pieces
                     else:
@@ -321,22 +322,23 @@ class Game(object):
                             if move[0] - move[2] > 0:
                                 # Left
                                 if move[1] - move[3] > 0:
-                                    if self.state[move[2] + 1][move[3] + 1] in set([-1, -2]):
+                                    if self.state[move[2] + 1][move[3] + 1] not in set([-1, -2]):
                                         move[4] = 0
                                 # Right
                                 else:
-                                    if self.state[move[2] + 1][move[3] - 1] in set([-1, -2]):
+                                    if self.state[move[2] + 1][move[3] - 1] not in set([-1, -2]):
                                         move[4] = 0
                             # Down
                             else:
                                 # Left
                                 if move[1] - move[3] > 0:
-                                    if self.state[move[2] - 1][move[3] + 1] in set([-1, -2]):
+                                    if self.state[move[2] - 1][move[3] + 1] not in set([-1, -2]):
                                         move[4] = 0
                                 # Right
                                 else:
-                                    if self.state[move[2] - 1][move[3] - 1] in set([-1, -2]):
+                                    if self.state[move[2] - 1][move[3] - 1] not in set([-1, -2]):
                                         move[4] = 0
+        return all_moves
 
     def attack_move_available(self, all_moves):
         attack_move_available = False
@@ -376,6 +378,7 @@ class Game(object):
                                     if self.state[move[2] - 1][move[3] - 1] in set([-1, -2]):
                                         attack_move_available = True
                                         break
+        return attack_move_available
 
     def remove_reverse_moves(self):
         all_moves = self.get_valid_moves()

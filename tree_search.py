@@ -12,7 +12,6 @@ class MCTS(object):
         self.game = game
         self.root = Node()
         for i in range(64):
-            print(i)
             node = self.root
             clone = game.clone()
             while node.is_not_leaf():
