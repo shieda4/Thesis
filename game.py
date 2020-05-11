@@ -19,23 +19,6 @@ def is_capture_move(move):
     pass
 
 
-def remove_reverse_moves(all_moves):
-    for move in all_moves:
-        if move[0] - move[2] < 0:
-            move[4] = 0
-    return all_moves
-    pass
-
-
-def remove_except_current(action, all_moves):
-    x , y = action[0:2]
-    for move in all_moves:
-        if move[0] != x and move[1] != y:
-            move[4] = 0
-    return all_moves
-    pass
-
-
 class Game(object):
     def __init__(self):
         self.row = self.column = 8
@@ -388,3 +371,19 @@ class Game(object):
                                     if self.state[move[2] - 1][move[3] - 1] in set([-1, -2]):
                                         attack_move_available = True
                                         break
+
+    def remove_reverse_moves(self):
+        all_moves = self.get_valid_moves()
+        for move in all_moves:
+            if self.state[move[0]][move[1]] == 1:
+                if move[0] - move[2] < 0:
+                    move[4] = 0
+        return all_moves
+
+    def remove_except_current(self, action):
+        all_moves = self.get_valid_moves()
+        x, y = action[0:2]
+        for move in all_moves:
+            if move[0] != x and move[1] != y:
+                move[4] = 0
+        return all_moves
