@@ -300,7 +300,8 @@ class Game(object):
         black = black * -1
         self.state = black
 
-    def remove_none_attacks(self, all_moves):
+    def remove_none_attacks(self):
+        all_moves = self.get_valid_moves()
         for move in all_moves:
             # For Valid Moves
             if move[4] == 1:
@@ -333,7 +334,8 @@ class Game(object):
                                     if self.state[move[2] - 1][move[3] - 1] in set([-1, -2]):
                                         move[4] = 0
 
-    def attack_move_available(self, all_moves):
+    def attack_move_available(self):
+        all_moves = self.get_valid_moves()
         attack_move_available = False
         for move in all_moves:
             # For Valid Moves
