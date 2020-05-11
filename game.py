@@ -19,6 +19,23 @@ def is_capture_move(move):
     pass
 
 
+def remove_reverse_moves(all_moves):
+    for move in all_moves:
+        if move[0] - move[2] < 0:
+            move[4] = 0
+    return all_moves
+    pass
+
+
+def remove_except_current(action, all_moves):
+    x , y = action[0:2]
+    for move in all_moves:
+        if move[0] != x and move[1] != y:
+            move[4] = 0
+    return all_moves
+    pass
+
+
 class Game(object):
     def __init__(self):
         self.row = self.column = 8

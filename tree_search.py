@@ -1,3 +1,5 @@
+from node import Node
+
 
 class MCTS(object):
     def __init__(self, net, node):
@@ -8,8 +10,9 @@ class MCTS(object):
 
     def search(self, game):
         self.game = game
-
+        self.root = Node()
         for i in range(64):
+            print(i)
             node = self.root
             clone = game.clone()
             while node.is_not_leaf():
