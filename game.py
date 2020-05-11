@@ -39,21 +39,26 @@ class Game(object):
 
     def play_action(self, action):
         x, y, x1, y1 = action[0:4]
-        # TODO: Add the Creation of king piece
 
         # For Normal Piece
         if self.state[x][y] == 1:
             # Non Capture Moves
             if (x - x1) == 1:
                 self.state[x][y] = 0
-                self.state[x1][y1] = 1
+                if x1 == 0:
+                    self.state[x1][y1] = 2
+                else:
+                    self.state[x1][y1] = 1
             # Capture Moves
             else:
                 x_mid = int((x + x1) / 2)
                 y_mid = int((y + y1) / 2)
                 self.state[x][y] = 0
                 self.state[x_mid][y_mid] = 0
-                self.state[x1][y1] = 1
+                if x1 == 0:
+                    self.state[x1][y1] = 2
+                else:
+                    self.state[x1][y1] = 1
 
         # For King Piece
         else:
