@@ -262,8 +262,6 @@ class Game(object):
             else:
                 pass
 
-        if self.attack_move_available(all_moves):
-            all_moves = self.remove_non_attacks(all_moves)
         return all_moves
 
     def check_game_over(self):
@@ -381,7 +379,38 @@ class Game(object):
                                         break
         return attack_move_available
 
-    def remove_reverse_moves(self, all_moves):
+    def if_attack_move(self, move):
+        # For Normal Pieces
+        if self.state[move[0]][move[1]] == 1:
+            if abs(move[0] - move[2]) == 2:
+                return True
+        # For King Pieces
+        else:
+            if abs(move[0] - move[2]) > 1:
+                # Up
+                if move[0] - move[2] > 0:
+                    # Left
+                    if move[1] - move[3] > 0:
+                        if self.state[move[2] + 1][move[3] + 1] in set([-1, -2]):
+                            return True
+                    # Right
+                    else:
+                        if self.state[move[2] + 1][move[3] - 1] in set([-1, -2]):
+                            return True
+                # Down
+                else:
+                    # Left
+                    if move[1] - move[3] > 0:
+                        if self.state[move[2] - 1][move[3] + 1] in set([-1, -2]):
+                            return True
+                    # Right
+                    else:
+                        if self.state[move[2] - 1][move[3] - 1] in set([-1, -2]):
+                            return True
+        return False
+
+    def remove_reverse_moves(self):
+        all_moves = self.get_valid_moves()
         for move in all_moves:
             if self.state[move[0]][move[1]] == 1:
                 if (move[0] - move[2]) < 0:
@@ -390,7 +419,7 @@ class Game(object):
 
     def remove_except_current(self, action):
         all_moves = self.get_valid_moves()
-        x, y = action[0:2]
+        x, y = action[2:4]
         for move in all_moves:
             if move[0] != x and move[1] != y:
                 move[4] = 0

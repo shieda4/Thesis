@@ -33,9 +33,8 @@ class Node(object):
 
         return self.children[best_uct_idx]
 
-    def expand_node(self, game, policy_vector):
+    def expand_node(self, valid_moves, policy_vector):
         self.child_policy = deepcopy(policy_vector)
-        valid_moves = game.get_valid_moves()
 
         for idx, move in enumerate(valid_moves):
             if move[4] != 0:
