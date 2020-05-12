@@ -32,6 +32,6 @@ while game.check_game_over() == 0:
     game.play_action(predicted_action)
     game.flip_perspective()
     # print(game.state, end="\n")
-    print(predicted_action)
+    # print(predicted_action)
     step += 1
 print(game.state, end="\n")

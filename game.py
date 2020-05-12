@@ -261,6 +261,7 @@ class Game(object):
             # Empty Square
             else:
                 pass
+
         if self.attack_move_available(all_moves):
             all_moves = self.remove_non_attacks(all_moves)
         return all_moves
@@ -380,11 +381,10 @@ class Game(object):
                                         break
         return attack_move_available
 
-    def remove_reverse_moves(self):
-        all_moves = self.get_valid_moves()
+    def remove_reverse_moves(self, all_moves):
         for move in all_moves:
             if self.state[move[0]][move[1]] == 1:
-                if move[0] - move[2] < 0:
+                if (move[0] - move[2]) < 0:
                     move[4] = 0
         return all_moves
 
