@@ -31,6 +31,14 @@ class Game(object):
                                [1, 0, 1, 0, 1, 0, 1, 0],
                                [0, 1, 0, 1, 0, 1, 0, 1],
                                [1, 0, 1, 0, 1, 0, 1, 0]])
+        # self.state = np.array([[0, 0, 0, 0, 0, 0, 0, -1],
+        #                        [0, 0, 0, 0, 0, 0, 0, 0],
+        #                        [0, 2, 0, 0, 0, 0, 0, -1],
+        #                        [0, 0, 0, 0, 0, 0, 0, 0],
+        #                        [0, 0, 0, 0, 0, 0, 0, 0],
+        #                        [-2, 0, 0, 0, 0, 0, 0, 0],
+        #                        [0, 0, 0, 0, 0, 0, 0, 1],
+        #                        [0, 0, 0, 0, 0, 0, 1, 0]])
 
         pass
 
@@ -39,21 +47,26 @@ class Game(object):
 
     def play_action(self, action):
         x, y, x1, y1 = action[0:4]
-        # TODO: Add the Creation of king piece
 
         # For Normal Piece
         if self.state[x][y] == 1:
             # Non Capture Moves
             if (x - x1) == 1:
                 self.state[x][y] = 0
-                self.state[x1][y1] = 1
+                if x1 == 0:
+                    self.state[x1][y1] = 2
+                else:
+                    self.state[x1][y1] = 1
             # Capture Moves
             else:
                 x_mid = int((x + x1) / 2)
                 y_mid = int((y + y1) / 2)
                 self.state[x][y] = 0
                 self.state[x_mid][y_mid] = 0
-                self.state[x1][y1] = 1
+                if x1 == 0:
+                    self.state[x1][y1] = 2
+                else:
+                    self.state[x1][y1] = 1
 
         # For King Piece
         else:
@@ -65,30 +78,26 @@ class Game(object):
                 if (x - x1) > 0:
                     # Left
                     if y - y1 > 0:
-                        if self.state[x1 + 1][y1 + 1] != 0:
-                            self.state[x1 + 1][y1 + 1] = 0
-                            self.state[x1][y1] = 2
-                            self.state[x][y] = 0
+                        self.state[x1 + 1][y1 + 1] = 0
+                        self.state[x1][y1] = 2
+                        self.state[x][y] = 0
                     # Right
                     else:
-                        if self.state[x1 + 1][y1 - 1] != 0:
-                            self.state[x1 + 1][y1 - 1] = 0
-                            self.state[x1][y1] = 2
-                            self.state[x][y] = 0
+                        self.state[x1 + 1][y1 - 1] = 0
+                        self.state[x1][y1] = 2
+                        self.state[x][y] = 0
                 # Down
                 else:
                     # Left
                     if y - y1 > 0:
-                        if self.state[x1 - 1][y1 + 1] != 0:
-                            self.state[x1 - 1][y1 + 1] = 0
-                            self.state[x1][y1] = 2
-                            self.state[x][y] = 0
+                        self.state[x1 - 1][y1 + 1] = 0
+                        self.state[x1][y1] = 2
+                        self.state[x][y] = 0
                     # Right
                     else:
-                        if self.state[x1 - 1][y1 - 1] != 0:
-                            self.state[x1 - 1][y1 - 1] = 0
-                            self.state[x1][y1] = 2
-                            self.state[x][y] = 0
+                        self.state[x1 - 1][y1 - 1] = 0
+                        self.state[x1][y1] = 2
+                        self.state[x][y] = 0
 
     def get_all_moves(self):
         all_moves = []
@@ -300,42 +309,41 @@ class Game(object):
         black = black * -1
         self.state = black
 
-    def remove_none_attacks(self):
-        all_moves = self.get_valid_moves()
+    def remove_non_attacks(self, all_moves):
         for move in all_moves:
             # For Valid Moves
             if move[4] == 1:
                 if True:
                     # For Normal Pieces
                     if self.state[move[0]][move[1]] == 1:
-                        if abs(move[0] - move[2]) == 2:
+                        if abs(move[0] - move[2]) != 2:
                             move[4] = 0
                     # For King Pieces
                     else:
-                        if abs(move[0] - move[2]) > 1:
-                            # Up
-                            if move[0] - move[2] > 0:
-                                # Left
-                                if move[1] - move[3] > 0:
-                                    if self.state[move[2] + 1][move[3] + 1] in set([-1, -2]):
-                                        move[4] = 0
-                                # Right
-                                else:
-                                    if self.state[move[2] + 1][move[3] - 1] in set([-1, -2]):
-                                        move[4] = 0
-                            # Down
+                        # if abs(move[0] - move[2]) > 1:
+                        # Up
+                        if move[0] - move[2] > 0:
+                            # Left
+                            if move[1] - move[3] > 0:
+                                if self.state[move[2] + 1][move[3] + 1] not in set([-1, -2]):
+                                    move[4] = 0
+                            # Right
                             else:
-                                # Left
-                                if move[1] - move[3] > 0:
-                                    if self.state[move[2] - 1][move[3] + 1] in set([-1, -2]):
-                                        move[4] = 0
-                                # Right
-                                else:
-                                    if self.state[move[2] - 1][move[3] - 1] in set([-1, -2]):
-                                        move[4] = 0
+                                if self.state[move[2] + 1][move[3] - 1] not in set([-1, -2]):
+                                    move[4] = 0
+                        # Down
+                        else:
+                            # Left
+                            if move[1] - move[3] > 0:
+                                if self.state[move[2] - 1][move[3] + 1] not in set([-1, -2]):
+                                    move[4] = 0
+                            # Right
+                            else:
+                                if self.state[move[2] - 1][move[3] - 1] not in set([-1, -2]):
+                                    move[4] = 0
+        return all_moves
 
-    def attack_move_available(self):
-        all_moves = self.get_valid_moves()
+    def attack_move_available(self, all_moves):
         attack_move_available = False
         for move in all_moves:
             # For Valid Moves
@@ -373,3 +381,50 @@ class Game(object):
                                     if self.state[move[2] - 1][move[3] - 1] in set([-1, -2]):
                                         attack_move_available = True
                                         break
+        return attack_move_available
+
+    def if_attack_move(self, move):
+        # For Normal Pieces
+        if self.state[move[0]][move[1]] == 1:
+            if abs(move[0] - move[2]) == 2:
+                return True
+        # For King Pieces
+        else:
+            if abs(move[0] - move[2]) > 1:
+                # Up
+                if move[0] - move[2] > 0:
+                    # Left
+                    if move[1] - move[3] > 0:
+                        if self.state[move[2] + 1][move[3] + 1] in set([-1, -2]):
+                            return True
+                    # Right
+                    else:
+                        if self.state[move[2] + 1][move[3] - 1] in set([-1, -2]):
+                            return True
+                # Down
+                else:
+                    # Left
+                    if move[1] - move[3] > 0:
+                        if self.state[move[2] - 1][move[3] + 1] in set([-1, -2]):
+                            return True
+                    # Right
+                    else:
+                        if self.state[move[2] - 1][move[3] - 1] in set([-1, -2]):
+                            return True
+        return False
+
+    def remove_reverse_moves(self):
+        all_moves = self.get_valid_moves()
+        for move in all_moves:
+            if self.state[move[0]][move[1]] == 1:
+                if (move[0] - move[2]) < 0:
+                    move[4] = 0
+        return all_moves
+
+    def remove_except_current(self, action):
+        all_moves = self.get_valid_moves()
+        x, y = action[2:4]
+        for move in all_moves:
+            if move[0] != x and move[1] != y:
+                move[4] = 0
+        return all_moves

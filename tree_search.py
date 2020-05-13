@@ -1,3 +1,5 @@
+from node import Node
+
 
 class MCTS(object):
     def __init__(self, net, node):
@@ -6,10 +8,11 @@ class MCTS(object):
         self.net = net
         pass
 
-    def search(self, game):
+    def search(self, game, chain_move=False, action=None):
         self.game = game
-
-        for i in range(64):
+        self.root = Node()
+        root_expansion = True
+        for i in range(512):
             node = self.root
             clone = game.clone()
             while node.is_not_leaf():
@@ -21,7 +24,19 @@ class MCTS(object):
             policy, value = self.net.predict(clone.state)
             value = value.flatten()[0]
 
-            valid_moves = game.get_valid_moves()
+            if not chain_move or not root_expansion:
+                valid_moves = clone.remove_reverse_moves()
+                if clone.attack_move_available(valid_moves):
+                    valid_moves = clone.remove_non_attacks(valid_moves)
+            else:
+                valid_moves = clone.remove_except_current(action)
+                valid_moves = clone.remove_non_attacks(valid_moves)
+
+            # if not root_expansion:
+            #     valid_moves = clone.remove_reverse_moves()
+            #     if clone.attack_move_available(valid_moves):
+            #         valid_moves = clone.remove_non_attacks(valid_moves)
+            root_expansion = False
 
             for idx, move in enumerate(valid_moves):
                 if move[4] == 0:
@@ -32,7 +47,7 @@ class MCTS(object):
             if policy_sum > 0:
                 policy[0] /= policy_sum
 
-            node.expand_node(game=clone, policy_vector=policy[0])
+            node.expand_node(valid_moves, policy_vector=policy[0])
 
             w = clone.check_game_over()
 
