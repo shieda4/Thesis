@@ -12,7 +12,7 @@ class MCTS(object):
         self.game = game
         self.root = Node()
         root_expansion = True
-        for i in range(64):
+        for i in range(512):
             node = self.root
             clone = game.clone()
             while node.is_not_leaf():
@@ -24,18 +24,18 @@ class MCTS(object):
             policy, value = self.net.predict(clone.state)
             value = value.flatten()[0]
 
-            if not chain_move:
+            if not chain_move or not root_expansion:
                 valid_moves = clone.remove_reverse_moves()
                 if clone.attack_move_available(valid_moves):
                     valid_moves = clone.remove_non_attacks(valid_moves)
             else:
                 valid_moves = clone.remove_except_current(action)
-                if clone.attack_move_available(valid_moves):
-                    valid_moves = clone.remove_non_attacks(valid_moves)
-            if not root_expansion:
-                valid_moves = clone.remove_reverse_moves()
-                if clone.attack_move_available(valid_moves):
-                    valid_moves = clone.remove_non_attacks(valid_moves)
+                valid_moves = clone.remove_non_attacks(valid_moves)
+
+            # if not root_expansion:
+            #     valid_moves = clone.remove_reverse_moves()
+            #     if clone.attack_move_available(valid_moves):
+            #         valid_moves = clone.remove_non_attacks(valid_moves)
             root_expansion = False
 
             for idx, move in enumerate(valid_moves):

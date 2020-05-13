@@ -4,11 +4,11 @@ def list_moves(all_moves):
             print(i, end=' -> ')
             print(move)
 
+
 from game import Game
 from node import Node
 from neural_network import Residual
 from tree_search import MCTS
-
 
 net = Residual()
 tree_search_1 = MCTS(net, Node())
@@ -35,16 +35,22 @@ while game.check_game_over() == 0:
     # Player 2
     else:
         print(game.state, end="\n")
-        list_moves(game.remove_reverse_moves())
-        predicted_action = game.remove_reverse_moves()[int(input())]
+        valid_moves = game.remove_reverse_moves()
+        if game.attack_move_available(valid_moves):
+            valid_moves = game.remove_non_attacks(valid_moves)
+        list_moves(valid_moves)
+        predicted_action = valid_moves[int(input())]
         game.play_action(predicted_action)
 
         if clone.if_attack_move(predicted_action):
             while game.attack_move_available(game.remove_except_current(predicted_action)):
                 print(game.state, end="\n")
-                predicted_action = game.remove_except_current()[int(input())]
+                valid_moves = game.remove_except_current(predicted_action)
+                if game.attack_move_available(valid_moves):
+                    valid_moves = game.remove_non_attacks(valid_moves)
+                list_moves(valid_moves)
+                predicted_action = valid_moves[int(input())]
                 game.play_action(predicted_action)
-
 
     game.flip_perspective()
     step += 1

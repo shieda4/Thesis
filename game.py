@@ -31,6 +31,14 @@ class Game(object):
                                [1, 0, 1, 0, 1, 0, 1, 0],
                                [0, 1, 0, 1, 0, 1, 0, 1],
                                [1, 0, 1, 0, 1, 0, 1, 0]])
+        # self.state = np.array([[0, 0, 0, 0, 0, 0, 0, -1],
+        #                        [0, 0, 0, 0, 0, 0, 0, 0],
+        #                        [0, 2, 0, 0, 0, 0, 0, -1],
+        #                        [0, 0, 0, 0, 0, 0, 0, 0],
+        #                        [0, 0, 0, 0, 0, 0, 0, 0],
+        #                        [-2, 0, 0, 0, 0, 0, 0, 0],
+        #                        [0, 0, 0, 0, 0, 0, 0, 1],
+        #                        [0, 0, 0, 0, 0, 0, 1, 0]])
 
         pass
 
@@ -70,30 +78,26 @@ class Game(object):
                 if (x - x1) > 0:
                     # Left
                     if y - y1 > 0:
-                        if self.state[x1 + 1][y1 + 1] != 0:
-                            self.state[x1 + 1][y1 + 1] = 0
-                            self.state[x1][y1] = 2
-                            self.state[x][y] = 0
+                        self.state[x1 + 1][y1 + 1] = 0
+                        self.state[x1][y1] = 2
+                        self.state[x][y] = 0
                     # Right
                     else:
-                        if self.state[x1 + 1][y1 - 1] != 0:
-                            self.state[x1 + 1][y1 - 1] = 0
-                            self.state[x1][y1] = 2
-                            self.state[x][y] = 0
+                        self.state[x1 + 1][y1 - 1] = 0
+                        self.state[x1][y1] = 2
+                        self.state[x][y] = 0
                 # Down
                 else:
                     # Left
                     if y - y1 > 0:
-                        if self.state[x1 - 1][y1 + 1] != 0:
-                            self.state[x1 - 1][y1 + 1] = 0
-                            self.state[x1][y1] = 2
-                            self.state[x][y] = 0
+                        self.state[x1 - 1][y1 + 1] = 0
+                        self.state[x1][y1] = 2
+                        self.state[x][y] = 0
                     # Right
                     else:
-                        if self.state[x1 - 1][y1 - 1] != 0:
-                            self.state[x1 - 1][y1 - 1] = 0
-                            self.state[x1][y1] = 2
-                            self.state[x][y] = 0
+                        self.state[x1 - 1][y1 - 1] = 0
+                        self.state[x1][y1] = 2
+                        self.state[x][y] = 0
 
     def get_all_moves(self):
         all_moves = []
@@ -316,27 +320,27 @@ class Game(object):
                             move[4] = 0
                     # For King Pieces
                     else:
-                        if abs(move[0] - move[2]) > 1:
-                            # Up
-                            if move[0] - move[2] > 0:
-                                # Left
-                                if move[1] - move[3] > 0:
-                                    if self.state[move[2] + 1][move[3] + 1] not in set([-1, -2]):
-                                        move[4] = 0
-                                # Right
-                                else:
-                                    if self.state[move[2] + 1][move[3] - 1] not in set([-1, -2]):
-                                        move[4] = 0
-                            # Down
+                        # if abs(move[0] - move[2]) > 1:
+                        # Up
+                        if move[0] - move[2] > 0:
+                            # Left
+                            if move[1] - move[3] > 0:
+                                if self.state[move[2] + 1][move[3] + 1] not in set([-1, -2]):
+                                    move[4] = 0
+                            # Right
                             else:
-                                # Left
-                                if move[1] - move[3] > 0:
-                                    if self.state[move[2] - 1][move[3] + 1] not in set([-1, -2]):
-                                        move[4] = 0
-                                # Right
-                                else:
-                                    if self.state[move[2] - 1][move[3] - 1] not in set([-1, -2]):
-                                        move[4] = 0
+                                if self.state[move[2] + 1][move[3] - 1] not in set([-1, -2]):
+                                    move[4] = 0
+                        # Down
+                        else:
+                            # Left
+                            if move[1] - move[3] > 0:
+                                if self.state[move[2] - 1][move[3] + 1] not in set([-1, -2]):
+                                    move[4] = 0
+                            # Right
+                            else:
+                                if self.state[move[2] - 1][move[3] - 1] not in set([-1, -2]):
+                                    move[4] = 0
         return all_moves
 
     def attack_move_available(self, all_moves):
