@@ -54,4 +54,10 @@ while game.check_game_over() == 0:
 
     game.flip_perspective()
     step += 1
-print(game.state, end="\n")
+    if step == 200:
+        break
+        store.update_values(0, 0)
+
+net.save_model('models/model2')
+store.save_store('store1')
+

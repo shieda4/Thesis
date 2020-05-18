@@ -1,5 +1,6 @@
 import numpy as np
 
+
 class Store(object):
     def __init__(self):
         self.player1 = []
@@ -20,7 +21,7 @@ class Store(object):
         np.save(filename + ".npy", self.merged)
 
     def load_store(self, filename):
-        temp = np.load(filename + 'npy')
+        temp = np.load(filename + '.npy', allow_pickle=True)
         self.merged = temp.tolist()
         self.player1 = self.merged[0]
         self.player2 = self.merged[1]
@@ -30,3 +31,14 @@ class Store(object):
         self.merged.append(self.player1)
         self.merged.append(self.player2)
         return self.merged
+
+    def update_values(self, player1=0, player2=0):
+        for i in range(len(self.player1)):
+            self.player1[i][2] = player1
+
+        for i in range(len(self.player2)):
+            self.player2[i][2] = player2
+
+        self.merged.clear()
+        self.merged.append(self.player1)
+        self.merged.append(self.player2)

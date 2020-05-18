@@ -63,8 +63,9 @@ class MCTS(object):
             if child.N > best_n:
                 best_n = child.N
                 best_n_idx = idx
-        self.root = self.root.children[best_n_idx]
-        return self.root.action
+        # self.root = self.root.children[best_n_idx]
+
+        return self.root.children[best_n_idx].action, self.root.children, game.get_valid_moves()
 
     def update_root(self, action):
         for child in self.root.children:

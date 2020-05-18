@@ -18,7 +18,7 @@ class Residual(object):
         x = Activation(activation='relu')(x)
 
         # Residual Block
-        for i in range(10):
+        for i in range(50):
             x = self.build_residual_block(x)
 
         residual_out = x
@@ -37,7 +37,7 @@ class Residual(object):
         x = Flatten()(x)
         value = Dense(activation='tanh', units=1)(x)
 
-        return Model(input_x, [policy, value])
+        return Model(input_x, [policy, value], name="Residual_Network")
 
         pass
 
@@ -59,4 +59,14 @@ class Residual(object):
 
     def predict(self, state):
         return self.model.predict(np.expand_dims(state, axis=0))
+
+    def save_model(self, filename):
+        self.model.save(filename)
+        print('Model saved to models')
+        pass
+
+    def fit_model(self, data):
+        states = data[0]
+        labels = [data[1], data[2]]
+        self.model.fit(states, labels, epochs=5)
         pass
