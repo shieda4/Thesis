@@ -94,3 +94,5 @@ while iteration < 10:
     # Network Training
     net.fit_model(store.merged)
     net.save_model('models/model' + (iteration + 1))
+
+# Final
