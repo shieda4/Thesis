@@ -269,10 +269,10 @@ class Game(object):
         return all_moves
 
     def check_game_over(self):
-        all_moves = self.get_valid_moves()
+        all_moves = self.remove_reverse_moves()
         enemy_clone = self.clone()
         enemy_clone.flip_perspective()
-        enemy_all_moves = enemy_clone.get_valid_moves()
+        enemy_all_moves = enemy_clone.remove_reverse_moves()
         move_available = False
         enemy_move_available = False
         for move in all_moves:

@@ -1,6 +1,7 @@
 from tensorflow.keras.layers import Input, Conv2D, BatchNormalization, Activation, Add, Flatten, Dense, Reshape
 from tensorflow.keras.models import Model
 from tensorflow.keras.optimizers import Adam
+from tensorflow.keras.models import load_model
 import numpy as np
 
 
@@ -66,7 +67,14 @@ class Residual(object):
         pass
 
     def fit_model(self, data):
-        states = data[0]
-        labels = [data[1], data[2]]
-        self.model.fit(states, labels, epochs=5)
+        data = data[0] + data[1]
+        states = np.asanyarray([d[0] for d in data])
+        policies = np.asanyarray([d[1] for d in data])
+        values = np.asanyarray([d[2] for d in data])
+        self.model.fit(states, [policies, values], batch_size=32, epochs=10)
+
+        pass
+
+    def load_model(self, filename):
+        self.model = load_model(filename)
         pass
