@@ -11,7 +11,7 @@ def get_tree_policy(children, all_moves):
         policy[idx] = visit_count[i] / sum(visit_count)
     return policy
 
-
+import time
 from game import Game
 from node import Node
 from neural_network import Residual
@@ -19,15 +19,15 @@ from tree_search import MCTS
 from data_store import Store
 
 # Creating Initial Network Model
-net = Residual()
-net.save_model('models/model0')
-del net
+# net = Residual()
+# net.save_model('models/model0')
+# del net
 
 # Starting 1 Self-play -> Training Iteration
 iteration = 0
+net = Residual()
+net.load_model('models/model' + str(iteration))
 while iteration < 10:
-    net = Residual()
-    net.load_model('models/model' + iteration)
     tree_search_1 = MCTS(net, Node())
     tree_search_2 = MCTS(net, Node())
     store = Store()
@@ -73,10 +73,9 @@ while iteration < 10:
                     game.play_action(predicted_action)
                     print('P2 Chain -> ', end='\t')
                     print(predicted_action)
-        print(game.state, end="\n")
         game.flip_perspective()
         step += 1
-        if step > 200:
+        if step > 120:
             break
             draw = True
     print(game.state, end="\n")
@@ -84,15 +83,17 @@ while iteration < 10:
     # Saving training data
     if not draw:
         if step % 2 == 0:
-            store.update_values(player1=1, player2=0)
+            store.update_values(player1=1, player2=-1)
         else:
-            store.update_values(player1=0, player2=1)
+            store.update_values(player1=-1, player2=1)
     else:
         store.update_values(player1=0, player2=0)
-    store.save_store('store' + iteration)
+    store.save_store('store' + str(iteration))
 
     # Network Training
     net.fit_model(store.merged)
-    net.save_model('models/model' + (iteration + 1))
+    net.save_model('models/model' + str(iteration + 1))
 
+    iteration = iteration + 1
+    time.sleep(300)
 # Final
