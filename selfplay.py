@@ -24,10 +24,10 @@ from data_store import Store
 # del net
 
 # Starting 1 Self-play -> Training Iteration
-iteration = 0
+iteration = 10
 net = Residual()
 net.load_model('models/model' + str(iteration))
-while iteration < 10:
+while iteration < 15:
     tree_search_1 = MCTS(net, Node())
     tree_search_2 = MCTS(net, Node())
     store = Store()
@@ -95,5 +95,5 @@ while iteration < 10:
     net.save_model('models/model' + str(iteration + 1))
 
     iteration = iteration + 1
-    time.sleep(300)
+    time.sleep(150)
 # Final
