@@ -1,6 +1,17 @@
 from node import Node
 import numpy as np
 
+
+def add_dirichlet_noise(policy):
+    dirichlet_input = [0.5 for x in range(280)]
+    dirichlet_list = np.random.dirichlet(dirichlet_input)
+    noisy_policy = []
+    for i, pol in enumerate(policy):
+        noisy_policy.append((1 - 0.25) * pol + 0.25 * dirichlet_list[i])
+
+    return noisy_policy
+
+
 class MCTS(object):
     def __init__(self, net, node):
         self.root = node
@@ -22,7 +33,7 @@ class MCTS(object):
                 clone.flip_perspective()
 
             policy, value = self.net.predict(clone.state)
-            policy = self.add_dirichlet_noise(policy)
+            policy = add_dirichlet_noise(policy)
             value = value.flatten()[0]
 
             if not chain_move or not root_expansion:
@@ -67,18 +78,3 @@ class MCTS(object):
         # self.root = self.root.children[best_n_idx]
 
         return self.root.children[best_n_idx].action, self.root.children, game.get_valid_moves()
-
-    def update_root(self, action):
-        for child in self.root.children:
-            if child.action == action:
-                self.root = child
-                break
-
-    def add_dirichlet_noise(self, policy):
-        dirichlet_input = [0.5 for x in range(280)]
-        dirichlet_list = np.random.dirichlet(dirichlet_input)
-        noisy_policy = []
-        for i, pol in enumerate(policy):
-            noisy_policy.append((1 - 0.25) * pol + 0.25 * dirichlet_list[i])
-
-        return noisy_policy
