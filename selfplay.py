@@ -19,12 +19,12 @@ from tree_search import MCTS
 from data_store import Store
 
 # Creating Initial Network Model
-# net = Residual()
-# net.save_model('models/model0')
-# del net
+net = Residual()
+net.save_model('models/model0')
+del net
 
 # Starting 1 Self-play -> Training Iteration
-iteration = 10
+iteration = 0
 net = Residual()
 net.load_model('models/model' + str(iteration))
 while iteration < 15:
