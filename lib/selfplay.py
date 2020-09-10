@@ -12,11 +12,11 @@ def get_tree_policy(children, all_moves):
     return policy
 
 import time
-from game import Game
-from node import Node
-from neural_network import Residual
-from tree_search import MCTS
-from data_store import Store
+from lib.game import Game
+from lib.node import Node
+from lib.neural_network import Residual
+from lib.tree_search import MCTS
+from lib.data_store import Store
 
 # Creating Initial Network Model
 net = Residual()

@@ -1,8 +1,8 @@
-from node import Node
+from lib.node import Node
 import numpy as np
 
 
-def add_dirichlet_noise(policy):
+def _add_dirichlet_noise(policy):
     dirichlet_input = [0.5 for x in range(280)]
     dirichlet_list = np.random.dirichlet(dirichlet_input)
     noisy_policy = []
@@ -36,7 +36,7 @@ class MCTS(object):
 
             # Get the policy and Value from the Neural Network
             policy, value = self.net.predict(clone.state)
-            policy = add_dirichlet_noise(policy)
+            policy = _add_dirichlet_noise(policy)
             value = value.flatten()[0]
 
             # Finalize the list of valid moves based on the current position

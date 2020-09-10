@@ -1,7 +1,7 @@
 from termcolor import colored
 
 
-def list_moves(all_moves):
+def _list_moves(all_moves):
     idx = []
     for i, move in enumerate(all_moves):
         if move[4] == 1:
@@ -22,7 +22,7 @@ class Human:
                 valid_moves = game.remove_non_attacks(valid_moves)
         else:
             valid_moves = game.remove_non_attacks(game.remove_except_current(prev_move))
-        indexes = list_moves(valid_moves)
+        indexes = _list_moves(valid_moves)
         selected_move = None
         while not selected_move in set(indexes):
             selected_move = int(input('Select move index: '))
