@@ -21,7 +21,7 @@ class Residual(object):
         x = Activation(activation='relu')(x)
 
         # Residual Block
-        for i in range(50):
+        for i in range(5):
             x = self.build_residual_block(x)
 
         residual_out = x
